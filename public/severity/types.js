@@ -3,56 +3,47 @@ class Severity extends window.AbstractList {
     super();
     this.fieldName = 'severity';
     this.title = 'Severity';
+    this.default = 2;
+    this.icon = 'https://cdn.glitch.com/36da036c-f499-46a1-aa9f-1e196ed62696%2Fchevron-circle-up-solid.svg?v=1589801033619'
     this.typesMap = new Map([
       [
-        "blocker",
+        0,
         {
-          name: "Blocker",
-          shortName: " ◰ ",
-          color: "sky"
-        }
-      ],
-      [
-        "critical",
-        {
-          name: "Critical",
-          shortName: " ⍟ ",
-          color: "blue"
-        }
-      ],
-      [
-        "major",
-        {
-          name: "Major",
-          shortName: " ○ ",
+          name: "⊘ Blocker",
+          shortName: "Blocker",
           color: "red"
         }
       ],
       [
-        "minor",
+        1,
         {
-          name: "Minor",
-          shortName: " ∿ ",
-          color: "purple"
+          name: "P1 High",
+          shortName: "P1",
+          color: "red"
         }
       ],
       [
-        "trivial",
+        2,
         {
-          name: "Trivial",
-          shortName: " ∿ ",
-          color: "purple"
+          name: "P2 Middle",
+          shortName: "P2",
+        }
+      ],
+      [
+        3,
+        {
+          name: "P3 Low",
+          shortName: "P3",
+        }
+      ],
+      [
+        4,
+        {
+          name: "P4 Trivial",
+          shortName: "P4",
         }
       ]
     ]);
-  }
-
-  openPopup(t) {
-    return super.openPopup(t, {
-      title: "Severity",
-      listMap: this.typesMap,
-      fieldName: "severity"
-    });
   }
 }
 

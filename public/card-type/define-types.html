@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Define Types</title>
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
+
+    <style>
+        textarea {
+            height: 150px;
+        }
+    </style>
+
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+</head>
+<body>
+    <form id="typesForm">
+        <textarea id="textAreaTypes"></textarea>
+        <button type="submit" class="mod-primary">Save</button>
+    </form>
+
+<script>
+    var t = TrelloPowerUp.iframe();
+
+    window.typesForm.addEventListener('submit', function(event){
+        // Stop the browser trying to submit the form itself.
+        event.preventDefault();
+        try {
+            setTypes();
+        } catch (e) {
+            t.alert({
+                message: JSON.stringify(e)
+            });
+        }
+    });
+
+    async function setTypes() {
+        const value = window.textAreaTypes.value;
+        const parsed = parsePrettyValue(value);
+        await t.set('board', 'shared', 'boardCardTypes', parsed);
+        t.closePopup();
+    }
+
+    async function getTypes() {
+        const types = await t.get('board', 'shared', 'boardCardTypes', []);
+        window.textAreaTypes.value = stringifyToPretty(types);
+    }
+
+    function parsePrettyValue(value) {
+        const levels = value.split(';').map(level => level.trim());
+        return levels.map(level => level.split(',').map(type => type.trim().toUpperCase()));
+    }
+
+    function stringifyToPretty(types) {
+        let value = [];
+        for (const level of types) {
+            value.push(level.join(', '));
+        }
+        return value.join(';\n');
+    }
+
+    getTypes();
+
+    t.render(() => t.sizeTo('#typesForm').done());
+</script>
+</body>
+</html>

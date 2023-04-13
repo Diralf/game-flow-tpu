@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+
+    <style>
+      .panel {
+        position: fixed;
+        background-color: white;
+        border: 1px solid black;
+        padding: 5px;
+        opacity: 0.5;
+      }
+
+      .panel:hover {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="panel">
+      <input type="range" id="cowbell" name="cowbell"
+             min="20" max="100" value="100" step="10" onchange="changeScale(this.value)">
+      <a id="newTabUml" href="" target="_blank">Open On New Tab</a>
+    </div>
+    <div class="view" id="uml"></div>
+
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//cdn.rawgit.com/jmnote/plantuml-encoder/d133f316/dist/plantuml-encoder.min.js"></script>
+    <script>
+      let svgElement;
+      let initialWidth;
+      let initialHeight;
+      var t = TrelloPowerUp.iframe();
+      const plantUml = t.arg("plantuml");
+      const src = "http://www.plantuml.com/plantuml/svg/" + window.plantumlEncoder.encode( plantUml );
+
+      $('#newTabUml').attr('href', src);
+
+      async function postData(url = "", data = {}) {
+        const response = await fetch(url, {
+          method: "POST", // *GET, POST, PUT, DELETE, etc.
+          mode: "cors", // no-cors, *cors, same-origin
+          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: "same-origin", // include, *same-origin, omit
+          headers: {
+            "Content-Type": "application/json"
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: "follow", // manual, *follow, error
+          referrerPolicy: "no-referrer", // no-referrer, *client
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        return response.text(); // parses JSON response into native JavaScript objects
+      }
+
+      postData("/api/uml", { url: src }).then(data => {
+        console.log(data); // JSON data parsed by `response.json()` call
+        const uml = document.getElementById('uml');
+        uml.innerHTML = data;
+        svgElement = document.getElementsByTagName('svg')[0];
+        initialWidth = parseInt(svgElement.style.width);
+        initialHeight = parseInt(svgElement.style.height);
+      });
+
+      function changeScale(value) {
+        svgElement.style.width = ((+value / 100) * initialWidth) + 'px';
+        svgElement.style.height = ((+value / 100) * initialHeight) + 'px';
+      }
+    </script>
+  </body>
+</html>

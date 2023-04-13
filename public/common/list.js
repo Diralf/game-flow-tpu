@@ -1,16 +1,16 @@
-const cardData = (t, field) => t.get("card", "shared", field);
-
 class AbstractList {
   constructor() {
     this.fieldName = 'AbstractList';
     this.title = 'AbstractList';
     this.typesMap = new Map();
+    this.default = null;
+    this.icon = null;
   }
 
-  openPopup(t) {
+  async openPopup(t) {
     return t.popup({
       title: this.title,
-      items: Array.from(this.typesMap).map(([typeKey, type]) => ({
+      items: Array.from((await this.getTypesMap(t))).map(([typeKey, type]) => ({
         text: type.name,
         callback: async (t, opts) => {
           await t.set("card", "shared", this.fieldName, typeKey);
@@ -21,31 +21,32 @@ class AbstractList {
   }
 
   async cardBadge(t) {
-    return [
-      await cardData(t, this.fieldName),
-      data => {
-        const type = this.typesMap.get(data) || {};
-        return {
-          text: type.shortName || type.name,
-          color: type.color
-        };
-      }
-    ];
+    let data = await t.get("card", "shared", this.fieldName);
+    if (data === undefined || data === null) {
+      await t.set('card', 'shared', this.fieldName, this.default);
+      data = this.default;
+    }
+    const type = (await this.getTypesMap(t)).get(data) || {};
+    return {
+      text: type.shortName || type.name,
+      color: type.color,
+      icon: type.icon || this.icon
+    };
   }
 
   async cardDetailBadge(t) {
-    return [
-      await cardData(t, this.fieldName),
-      data => {
-        const type = this.typesMap.get(data) || {};
-        return {
-          title: this.title,
-          text: type.name || "No",
-          color: type.color,
-          callback: t => this.openPopup(t)
-        };
-      }
-    ];
+    const data = await t.get("card", "shared", this.fieldName, this.default);
+    const type = (await this.getTypesMap(t)).get(data) || {};
+    return {
+      title: this.title,
+      text: type.name || "No",
+      color: type.color,
+      callback: t => this.openPopup(t)
+    };
+  }
+
+  async getTypesMap(t) {
+    return this.typesMap;
   }
 }
 
