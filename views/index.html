@@ -9,11 +9,25 @@
     <p>This is the HTML connector for the Power-Up. It will be loaded into a hidden iframe when your Power-Up is enabled.</p>
    
     <p>Not sure what is going on? Head on over to the <a id="readme" href="https://glitch.com/edit/#!/trello-power-up-skeleton?path=README.md">README</a>.</p>
-  
+
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="https://api.trello.com/1/client.js?key=250e452e2b064da0052d9eb75fd0b0e9"></script>
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script src="./login/check.js"></script>
     <script src="./common/list.js"></script>
+    <script src="./common/create-card.js"></script>
     <script src="./card-type/types.js"></script>
     <script src="./severity/types.js"></script>
+    <script src="./link/link.js"></script>
+    <script src="./childes/link.js"></script>
+    <script src="./depends/link.js"></script>
+    <script src="./list-type/list-type.js"></script>
+    <script src="./link-in-status/badges.js"></script>
+    <script src="./uml/generator.js"></script>
+    <script src="./idle-time/idle-time.js"></script>
     <script src="./js/client.js"></script>
     <script style="text/javascript">
       let projectName = window.location.hostname.slice(0, window.location.hostname.length-10)
