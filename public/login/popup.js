@@ -11,6 +11,11 @@ window.login.addEventListener('submit', function(event){
   });
 });
 
+window.cardlogout = () => {
+  console.log('token removed');
+  t.remove('board', 'private', 'token');
+};
+
 t.render(function(){
   return t.sizeTo('#login').done();
 });

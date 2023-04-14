@@ -37,8 +37,10 @@
     async function setTypes() {
         const value = window.textAreaTypes.value;
         const parsed = parsePrettyValue(value);
-        await t.set('board', 'shared', 'boardCardTypes', parsed);
-        t.closePopup();
+        if (parsed) { 
+          await t.set('board', 'shared', 'boardCardTypes', parsed);
+          t.closePopup();
+        }
     }
 
     async function getTypes() {
@@ -47,16 +49,41 @@
     }
 
     function parsePrettyValue(value) {
-        const levels = value.split(';').map(level => level.trim());
-        return levels.map(level => level.split(',').map(type => type.trim().toUpperCase()));
+      console.log({value});
+        try {
+          return JSON.parse(value);
+        } catch (e) {
+          console.error(e);
+        }
+        
+        // const levels = value.split(';').map(level => level.trim());
+        // return levels.map(level => level.split(',').map(type => {
+        //   try {
+        //     console.log(type);
+        //     const result = JSON.parse(type);
+        //     if (typeof result === 'string') {
+        //       return {
+        //         name: type.trim().toUpperCase(),
+        //       }
+        //     }
+        //     return result;
+        //   } catch (e) {
+        //     console.error(e);
+        //     return {
+        //       name: 'unknown',
+        //       content: type,
+        //     }
+        //   }
+        // }));
     }
 
     function stringifyToPretty(types) {
-        let value = [];
-        for (const level of types) {
-            value.push(level.join(', '));
-        }
-        return value.join(';\n');
+        // let value = [];
+        // for (const level of types) {
+        //     const levelArray = level.map(type => JSON.stringify(type));
+        //     value.push(levelArray.join(', '));
+        // }
+        return JSON.stringify(types, null, 2);// value.join(';\n');
     }
 
     getTypes();

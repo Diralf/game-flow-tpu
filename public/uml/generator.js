@@ -85,14 +85,14 @@ class UmlGenerator {
           ${coloredTypes}
           
           ArrowColor #091E42
-          FontName Impact
         }
         ${resultUml}\n
         @enduml`;
 
         console.log(finalResult);
+        localStorage.setItem('plantUML', finalResult);
         t.modal({
-            url: './uml/uml.html',
+            url: './uml/uml-jquery.html',
             args: { plantuml: finalResult },
             fullscreen: true,
             title: 'Uml Diagram'

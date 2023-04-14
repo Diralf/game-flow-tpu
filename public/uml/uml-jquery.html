@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <!-- rawdeflate.js is implicity used by jquery_plantuml.js -->
+  </head>
+
+  <body>
+    <img id="uml"/>
+    <hr />
+    <pre id="source" border="1"></pre>
+    <hr />
+    <a href="http://www.plantuml.com/plantuml/uml/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000" target="_blank">PlantUML Online Server</a>
+    
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script>
+      var t = TrelloPowerUp.iframe();
+      const plantUml = t.arg("plantuml");
+      const umlView = document.getElementById('uml');
+      umlView.setAttribute('uml', plantUml);
+      
+      
+      const umlSource = document.getElementById('source');
+      umlSource.innerHTML = plantUml;
+      window.copy = () => {
+        navigator.clipboard.writeText(plantUml);
+      }
+    </script>
+    <script type="text/javascript" src="jquery_plantuml.js"></script>
+  </body>
+</html>

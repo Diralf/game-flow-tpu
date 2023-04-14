@@ -1,7 +1,7 @@
 class Childes extends Links {
     constructor() {
         super();
-        this.childesTitle = 'Childes';
+        this.childesTitle = 'Children';
         this.parentsTitle = 'Parents';
         this.childesFieldName = 'childes';
         this.parentsFieldName = 'parents';

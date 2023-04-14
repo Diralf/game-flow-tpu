@@ -27,8 +27,11 @@ class AbstractList {
       data = this.default;
     }
     const type = (await this.getTypesMap(t)).get(data) || {};
+    if (type?.name?.toUpperCase() === 'NO') {
+      return null;
+    }
     return {
-      text: type.shortName || type.name,
+      text: type.shortName ?? type.name,
       color: type.color,
       icon: type.icon || this.icon
     };

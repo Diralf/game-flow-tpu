@@ -66,11 +66,14 @@ class CardType extends window.AbstractList {
         types.push(...level);
       }
       let colors = [];
-      const typesMap = types.map(type => {
+      const typesMap = types.map(typeObj => {
+        const type = typeObj.name;
         if (colors.length === 0) {
           colors = [...this.colors];
         }
-        const color = type.toLowerCase().includes('bug') ? ['red', '#BF2600'] : colors.shift();
+        const customCollor = typeObj.color && typeObj.umlColor ? [typeObj.color, typeObj.umlColor] : null;
+        const color = customCollor ?? (type.toLowerCase().includes('bug') ? ['red', '#BF2600'] : colors.shift());
+        const customIcon = typeObj.icon ? `https://cdn.glitch.com/36da036c-f499-46a1-aa9f-1e196ed62696%2F${typeObj.icon}` : null;
         const icon = type.toLowerCase().includes('bug') 
           ? 'https://cdn.glitch.com/36da036c-f499-46a1-aa9f-1e196ed62696%2Fbug-solid.svg?v=1589800839792' 
           : 'https://cdn.glitch.com/36da036c-f499-46a1-aa9f-1e196ed62696%2Fcogs-solid.svg?v=1589801018782';
@@ -78,10 +81,10 @@ class CardType extends window.AbstractList {
           type,
           {
             name: type,
-            shortName: type,
-            color: color[0],
+            shortName: typeObj.shortName ?? type,
+            color: undefined,//color[0],
             umlColor: color[1],
-            icon
+            icon: customIcon ?? icon,
           }
         ];
       })
@@ -89,10 +92,16 @@ class CardType extends window.AbstractList {
     }
     return this.typesMap;
   }
+  
+  async findTypeLevelIndex(t, currentCardType) {
+    const typeRelations = await this.getTypesRelations(t);
+    return typeRelations.findIndex(level => !!level.find((typeObj) => typeObj.name === currentCardType))
+  }
 
   async getTypeRelation(t, currentCardType, direction) {
+    console.log('getTypeRelation');
     const typeRelations = await this.getTypesRelations(t);
-    const currentCardLevelIndex = typeRelations.findIndex(level => level.includes(currentCardType));
+    const currentCardLevelIndex = await this.findTypeLevelIndex(t, currentCardType);
     const availableTypes = typeRelations[currentCardLevelIndex + direction];
     return availableTypes || [];
   }
