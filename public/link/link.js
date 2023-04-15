@@ -9,6 +9,7 @@ class Links {
       singleParent: false,
       singleChild: false,
       isCreateAllowed: false,
+      callback: () => {},
     };
   }
 
@@ -29,6 +30,8 @@ class Links {
       options.fieldName,
       options.reverseSingle
     );
+    
+    await this.defaultOptions.callback(t);
   }
 
   async addLink(t, fromCard, toCard, fieldName, reverseField, single) {
@@ -285,7 +288,7 @@ class Links {
       icon:
         cardIcon?.icon ??
         "https://cdn.glitch.com/1b42d7fe-bda8-4af8-a6c8-eff0cea9e08a%2Frocket-ship.png?1494946700421",
-      text: card.name,
+      text: '', // card.name,
       color: cardIcon?.color,
     };
   }

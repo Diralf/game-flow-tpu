@@ -109,7 +109,7 @@ class CardType extends window.AbstractList {
   buildBoardButton(t) {
     this.getTypesMap(t);
     return {
-      text: 'Define Card Types',
+      text: 'Card Types',
       callback: (t) => t.popup({
         title: 'Define Card Types',
         url: './card-type/define-types.html'

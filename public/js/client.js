@@ -13,7 +13,7 @@ TrelloPowerUp.initialize({
   'board-buttons': function (t, opts) {
     return [{
       // we can either provide a button that has a callback function
-      text: 'Login to Game Flow',
+      text: 'GF Login',
       callback: async t => {
         await t.popup({
           title: 'Login to Game Flow',
@@ -24,7 +24,8 @@ TrelloPowerUp.initialize({
     },
       window.listType.createBoardButton(t),
       window.uml.buildBoardButton(t),
-      window.cardType.buildBoardButton(t)
+      window.cardType.buildBoardButton(t),
+      window.cardIcon.buildBoardButton(t),
     ];
   },
   "card-buttons": function(t, options) {
@@ -39,7 +40,8 @@ TrelloPowerUp.initialize({
             url: "./estimate/c.html"
           });
         }
-      }
+      },
+      window.cardIcon.buildCardButton(t)
     ];
   },
   "card-badges": async function(t, options) {

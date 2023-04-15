@@ -62,6 +62,25 @@ if (deflater) {
   deflater.onmessage = done_deflating;
 }
 
+// function done_deflating(e) {
+
+// var done = 0;
+// $("img").each(function () {
+//   if (done==1) return;
+//   var u1 = $(this).attr("src");
+//   if (u1!=null) return;
+//   var u2 = $(this).attr("uml");
+//   if (u2=="") return;
+//   $(this).attr("uml", "");
+//   var svgObj = document.createElement('object');
+//   svgObj.setAttribute("data", "http://www.plantuml.com/plantuml/svg/"+encode64(e.data));
+//   svgObj.setAttribute("type", "image/svg+xml");
+//   document.getElementById("svg_canvas").appendChild(svgObj);
+//   done = 1;
+// });
+// plantuml_runonce();
+// }
+
 function done_deflating(e) {
 var done = 0;
 $("img").each(function () {

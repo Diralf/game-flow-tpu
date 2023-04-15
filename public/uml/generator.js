@@ -2,7 +2,7 @@ class UmlGenerator {
 
     buildBoardButton(t) {
         return {
-            text: 'Generate UML Diagram',
+            text: 'to UML',
             callback: (t) => this.generate(t),
             condition: 'signedIn'
         }

@@ -27,6 +27,9 @@ class AbstractList {
       data = this.default;
     }
     const type = (await this.getTypesMap(t)).get(data) || {};
+    if (type.hidden) {
+      return null;
+    }
     if (type?.name?.toUpperCase() === 'NO') {
       return null;
     }

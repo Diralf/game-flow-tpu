@@ -27,6 +27,7 @@ class Severity extends window.AbstractList {
         {
           name: "P2 Middle",
           shortName: "P2",
+          hidden: true,
         }
       ],
       [
@@ -34,6 +35,7 @@ class Severity extends window.AbstractList {
         {
           name: "P3 Low",
           shortName: "P3",
+          hidden: true,
         }
       ],
       [
@@ -41,6 +43,7 @@ class Severity extends window.AbstractList {
         {
           name: "P4 Trivial",
           shortName: "P4",
+          hidden: true,
         }
       ]
     ]);
