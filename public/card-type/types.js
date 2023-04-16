@@ -82,7 +82,7 @@ class CardType extends window.AbstractList {
           {
             name: type,
             shortName: typeObj.shortName ?? type,
-            color: undefined,//color[0],
+            color: 'light-gray',//color[0],
             umlColor: color[1],
             icon: customIcon ?? icon,
           }

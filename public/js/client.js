@@ -47,9 +47,9 @@ TrelloPowerUp.initialize({
   "card-badges": async function(t, options) {
     return [
       // [await t.card('idShort'), card => ({text: `#${card.idShort}`})],
+      await window.cardType.cardBadge(t),
       await window.cardIcon.cardBadge(t),
       await window.childes.parentSingleCardBadge(t),
-      await window.cardType.cardBadge(t),
       await window.severity.cardBadge(t),
       ...(await window.linkInStatus.createBadges(t)),
       await window.idleTime.cardBadge(t)
