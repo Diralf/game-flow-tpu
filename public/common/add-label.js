@@ -7,7 +7,6 @@ window.addLabelToCard = async (t, cardId, labelId) => {
       null,
       (data) => {
         console.log("Label added successfully.");
-        console.log(JSON.stringify(data, null, 2));
         resolve(data);
       },
       (fail) => reject(fail)

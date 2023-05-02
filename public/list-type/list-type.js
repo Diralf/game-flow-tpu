@@ -50,6 +50,7 @@ class ListType {
       text: "List Types",
       callback: (t) => this.openListOfLists(t),
       condition: "signedIn",
+      icon: "https://cdn.glitch.global/36da036c-f499-46a1-aa9f-1e196ed62696/bars-solid.svg?v=1682020993450",
     };
   }
 

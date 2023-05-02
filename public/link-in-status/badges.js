@@ -34,9 +34,25 @@ class LinkInStatus {
         });
     }
 
+    async getAllChildren(t, cardId = 'card') {
+        try {
+            const children = await t.get(cardId, 'shared', window.links.childesFieldName, []);
+            let nextChildren = [];
+            for (const childId of children) {
+                const nextChild = await this.getAllChildren(t, childId);
+                nextChildren.push(...nextChild);
+            }
+
+            return [...children, ...nextChildren];
+        } catch (e) {
+            console.error(e);
+            return [];
+        }
+    }
+
     async countForStatus(t) {
         const countsInList = {};
-        const savedLinks = await t.get('card', 'shared', window.links.childesFieldName, []);
+        const savedLinks = await this.getAllChildren(t);
         const lists = await t.lists('all');
 
         for (const link of savedLinks) {

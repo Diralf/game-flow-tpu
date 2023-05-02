@@ -20,13 +20,24 @@ class AbstractList {
     });
   }
 
+  async getPreviousValue(t, currentId) {
+    const typedMap = Array.from(await this.getTypesMap(t));
+    const prevPair = typedMap.find(([key, value]) => value.prevId === currentId);
+    if (prevPair) {
+      await t.set('card', 'shared', this.fieldName, prevPair[0]);
+      return prevPair[1];
+    }
+    return null;
+  }
+
   async cardBadge(t) {
     let data = await t.get("card", "shared", this.fieldName);
     if (data === undefined || data === null) {
       await t.set('card', 'shared', this.fieldName, this.default);
       data = this.default;
     }
-    const type = (await this.getTypesMap(t)).get(data) || {};
+    const typedMap = await this.getTypesMap(t);
+    const type = typedMap.get(data) ?? (await this.getPreviousValue(t, data)) ?? {};
     if (type.hidden) {
       return null;
     }
@@ -53,6 +64,11 @@ class AbstractList {
 
   async getTypesMap(t) {
     return this.typesMap;
+  }
+
+  getNameOfItem(id) {
+    console.log({id, item: this.typesMap.get(id), map: this.typesMap});
+    return this.typesMap.get(id) ?? id;
   }
 }
 

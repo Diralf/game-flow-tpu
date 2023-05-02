@@ -11,39 +11,42 @@ class Severity extends window.AbstractList {
         {
           name: "⊘ Blocker",
           shortName: "Blocker",
-          color: "red"
+          color: "red",
+          icon: "https://cdn.glitch.global/36da036c-f499-46a1-aa9f-1e196ed62696/skull-crossbones-solid.svg?v=1681677711858",
         }
       ],
       [
         1,
         {
           name: "P1 High",
-          shortName: "P1",
-          color: "red"
+          shortName: "High",
+          color: "red",
+          icon: "https://cdn.glitch.global/36da036c-f499-46a1-aa9f-1e196ed62696/angles-up-solid.svg?v=1681677647716"
         }
       ],
       [
         2,
         {
           name: "P2 Middle",
-          shortName: "P2",
-          hidden: true,
+          shortName: "Mid",
+          color: "light-gray",
+          icon: 'https://cdn.glitch.com/36da036c-f499-46a1-aa9f-1e196ed62696%2Fchevron-circle-up-solid.svg?v=1589801033619',
         }
       ],
       [
         3,
         {
           name: "P3 Low",
-          shortName: "P3",
-          hidden: true,
+          shortName: "Low",
+          icon: "https://cdn.glitch.global/36da036c-f499-46a1-aa9f-1e196ed62696/angle-down-solid.svg?v=1681677656984",
         }
       ],
       [
         4,
         {
           name: "P4 Trivial",
-          shortName: "P4",
-          hidden: true,
+          shortName: "Triv",
+          icon: 'https://cdn.glitch.global/36da036c-f499-46a1-aa9f-1e196ed62696/angles-down-solid.svg?v=1681677652220',
         }
       ]
     ]);

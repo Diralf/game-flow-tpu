@@ -1,0 +1,479 @@
+@startuml
+
+        skinparam state {
+          BackgroundColor #FAFBFC
+          BackgroundColor<<todo>> #EBECF0
+
+          BackgroundColor<<burn>> #FF2E00
+          BackgroundColor<<hot>> #FFC0B2
+
+          BackgroundColor<<blocked>> #FF7452
+          BackgroundColor<<inprogress>> #FFC400
+          BackgroundColor<<intest>> #66BAFF
+          BackgroundColor<<done>> #36B37E
+          BackgroundColor<<closed>> #006644
+          BorderColor #091E42
+          BorderColor<<p0>> #BF2600
+          BorderColor<<p1>> #BF2600
+          BorderColor<<p2>> #091E42
+          BorderColor<<p3>> #C1C7D0
+          BorderColor<<p4>> #FFFFFF
+          FontColor<<p0>> #BF2600
+          FontColor<<p1>> #BF2600
+          FontColor<<p2>> #091E42
+          FontColor<<p3>> #C1C7D0
+          FontColor<<p4>> #FFFFFF
+          HyperLinkColor<<CARD_TYPE_1>> #403294
+HyperLinkColor<<CARD_TYPE_2-1>> #0747A6
+HyperLinkColor<<CARD_TYPE_2>> #008DA6
+HyperLinkColor<<CARD_TYPE_2-2>> #00a61c
+HyperLinkColor<<CARD_TYPE_3>> #a58300
+HyperLinkColor<<CARD_TYPE_2-3>> #af5800
+HyperLinkColor<<BUG>> #BF2600
+HyperLinkColor<<CARD_TYPE_4>> #403294
+HyperLinkColor<<CARD_TYPE_2-4>> #0747A6
+HyperLinkColor<<CARD_TYPE_2-5>> #008DA6
+
+          ArrowColor #091E42
+        }
+
+state "[[https://trello.com/c/M8bydkon Сущности]]" as card449  <<todo>> <<CARD_TYPE_2-1>> <<p1>> {
+
+  state "[[https://trello.com/c/NQSCrz3N Абстрактный\nперсонаж]]" as card482  <<todo>> <<CARD_TYPE_2-2>> <<p1>> {
+
+    state "[[https://trello.com/c/u6ASup4J Неподвижная\nболванка персонажа]]" as card483  <<inprogress>> <<CARD_TYPE_2-3>> <<p1>> {
+ json " " as Checklists_card483 {
+  "Tasks": [
+    "<color:green>**CODE** Сделать класс для персонажа",
+    "<color:green>**CODE** Сделать возможность добавлять анимации",
+    "**CODE** Спавнить персонажа на уровне по спавн-поинту",
+    "<color:green>**CODE** Сделать чтобы не проваливался в землю"
+  ]
+}
+    }
+    card483 : PART - P1
+    card483 : IN PROGRESS
+
+    state "[[https://trello.com/c/fY5Et2Qx Идл | Абстрактный]]" as card484  <<done>> <<CARD_TYPE_2-3>> <<p3>> {
+     }
+    card484 : PART - P3
+    card484 : DONE
+
+    state "[[https://trello.com/c/sDaIzLJY Ходьба |\nАбстрактный]]" as card485  <<done>> <<CARD_TYPE_2-3>> <<p1>> {
+     }
+    card485 : PART - P1
+    card485 : DONE
+
+    state "[[https://trello.com/c/XyvrB6x3 Прыжок |\nАбстрактный]]" as card486  <<inprogress>> <<CARD_TYPE_2-3>> <<p1>> {
+ json " " as Checklists_card486 {
+  "Tasks": [
+    "<color:green>**CODE** Сделать триггер для прыжка",
+    "<color:green>**CODE** Сделать запуск анимации прыжка",
+    "**CODE** Сделать запуск анимации падения",
+    "<color:green>**CODE** Ограничить прыжок одним разом"
+  ]
+}
+    }
+    card486 : PART - P1
+    card486 : IN PROGRESS
+
+    state "[[https://trello.com/c/eYRPrLlh Подъем предметов |\nАбстрактный]]" as card487  <<todo>> <<CARD_TYPE_2-3>> <<p2>> {
+ json " " as Checklists_card487 {
+  "Tasks": [
+    "**CODE** Сделать триггер для подъема ближайшего предмета",
+    "**CODE** Запустить анимацию ходьбы с поднятым предметом"
+  ]
+}
+    }
+    card487 : PART - P2
+    card487 : TODO
+
+    state "[[https://trello.com/c/Aq43YofT Толкание предметов\n| Абстрактный]]" as card488  <<todo>> <<CARD_TYPE_2-3>> <<p2>> {
+ json " " as Checklists_card488 {
+  "Tasks": [
+    "**CODE** Сделать толкание предметов",
+    "**CODE** Запустить анимацию толкания предмета"
+  ]
+}
+    }
+    card488 : PART - P2
+    card488 : TODO
+
+    state "[[https://trello.com/c/PbLnm60s Смерть |\nАбстрактный]]" as card489 <<hot>> <<todo>> <<CARD_TYPE_2-3>> <<p1>> {
+ json " " as Checklists_card489 {
+  "Tasks": [
+    "**CODE** Сделать уничтожение объекта",
+    "**CODE** Запустить анимацию смерти",
+    "**PARTICLE** Запустить частицы"
+  ]
+}
+    }
+    card489 : PART - P1
+    card489 : TODO
+
+    state "[[https://trello.com/c/D3Q8rXWI Применение\nспособности |\nАбстрактный]]" as card490  <<todo>> <<CARD_TYPE_2-3>> <<p3>> {
+ json " " as Checklists_card490 {
+  "Tasks": [
+    "**CODE** Сделать триггер применения способности",
+    "**PARTICLE** Запустить частицы применения способности"
+  ]
+}
+    }
+    card490 : PART - P3
+    card490 : TODO
+  }
+  card482 : FEATURE - P1
+  card482 : TODO
+}
+card449 : EPIC - P1
+card449 : TODO
+
+state "[[https://trello.com/c/OB3PXE2L Персонажи]]" as card442  <<todo>> <<CARD_TYPE_2-1>> <<p1>> {
+ json Described_card442 {
+  "To Create": 28
+}
+
+  state "[[https://trello.com/c/eRk7buWW Персонаж Far Away]]" as card89  <<todo>> <<CARD_TYPE_2-2>> <<p1>> {
+
+    state "[[https://trello.com/c/Pkkep2DL Концепт Far Away]]" as card476  <<done>> <<CARD_TYPE_2-3>> <<p2>> {
+ json " " as Checklists_card476 {
+  "Tasks": [
+    "**ART** Нарисовать концепт Far Away"
+  ]
+}
+    }
+    card476 : PART - P2
+    card476 : DONE
+
+    state "[[https://trello.com/c/aMsoY7Wb Базовые анимации\nFar Away]]" as card477  <<todo>> <<CARD_TYPE_2-3>> <<p2>> {
+ json " " as Checklists_card477 {
+  "Tasks": [
+    "**ART** Анимация ходьбы Far Away",
+    "<color:green>**ART** Анимация Прыжка Far Away"
+  ]
+}
+    }
+    card477 : PART - P2
+    card477 : TODO
+
+    state "[[https://trello.com/c/vZMjMHHn Дополнительные\nанимации Far Away]]" as card478  <<todo>> <<CARD_TYPE_2-3>> <<p2>> {
+ json " " as Checklists_card478 {
+  "Tasks": [
+    "**ART** Идл Анимация Far Away",
+    "**ART** Анимация Падения Far Away",
+    "**ART** Анимация Ходьбы с предметом Far Away",
+    "**ART** Анимация Толкания предмета Far Away"
+  ]
+}
+    }
+    card478 : PART - P2
+    card478 : TODO
+json " " as Checklists_card89 {
+  "Анимации": [
+    "<color:green>**ART** Концепт",
+    "**ART** Анимация ходьбы",
+    "**ART** Идл Анимация",
+    "**ART** Анимация Прыжка",
+    "**ART** Анимация Падения",
+    "**ART** Анимация Ходьбы с предметом",
+    "**ART** Анимация Толкания предмета",
+    "**ART** Анимация Открытия портала"
+  ]
+}
+  }
+  card89 : FEATURE - P1
+  card89 : TODO
+
+  state "[[https://trello.com/c/QLUYUHMH Персонаж Long Ago]]" as card90  <<todo>> <<CARD_TYPE_2-2>> <<p2>> {
+
+    state "[[https://trello.com/c/OMtcEe9a Концепт Long Ago]]" as card479  <<done>> <<CARD_TYPE_2-3>> <<p2>> {
+ json " " as Checklists_card479 {
+  "Tasks": [
+    "**ART** Нарисовать концепт Long Ago"
+  ]
+}
+    }
+    card479 : PART - P2
+    card479 : DONE
+
+    state "[[https://trello.com/c/cbXqdVSq Базовые анимации\nLong Ago]]" as card480  <<todo>> <<CARD_TYPE_2-3>> <<p2>> {
+ json " " as Checklists_card480 {
+  "Tasks": [
+    "**ART** Анимация ходьбы Long Ago",
+    "**ART** Анимация Прыжка Long Ago"
+  ]
+}
+    }
+    card480 : PART - P2
+    card480 : TODO
+
+    state "[[https://trello.com/c/FOmqd4HZ Дополнительные\nанимации Long Ago]]" as card481  <<todo>> <<CARD_TYPE_2-3>> <<p2>> {
+ json " " as Checklists_card481 {
+  "Tasks": [
+    "**ART** Идл Анимация Long Ago",
+    "**ART** Анимация Падения Long Ago",
+    "**ART** Анимация Ходьбы с предметом Long Ago",
+    "**ART** Анимация Толкания предмета Long Ago"
+  ]
+}
+    }
+    card481 : PART - P2
+    card481 : TODO
+json " " as Checklists_card90 {
+  "Анимации": [
+    "<color:green>**ART** Концепт",
+    "**ART** Анимация ходьбы",
+    "**ART** Идл Анимация",
+    "**ART** Анимация Прыжка",
+    "**ART** Анимация Падения",
+    "**ART** Анимация Ходьбы с предметом",
+    "**ART** Анимация Толкания предмета",
+    "**ART** Анимация Остановки времени"
+  ]
+}
+  }
+  card90 : FEATURE - P2
+  card90 : TODO
+
+  state "[[https://trello.com/c/rqRb8MI2 Управляемый\nперсонаж]]" as card491 <<hot>> <<todo>> <<CARD_TYPE_2-2>> <<p1>> {
+ json " " as Checklists_card491 {
+  "Управление персонажем": [
+    "**CODE** Запустить триггер ходьбы управлением",
+    "**CODE** Запустить триггер прыжка управлением",
+    "**CODE** Запустить триггер подъема предмета",
+    "**CODE** Запустить триггер применения способности",
+    "**CODE** Запустить триггер ходьбы управлением"
+  ]
+}
+  }
+  card491 : FEATURE - P1
+  card491 : TODO
+}
+card442 : EPIC - P1
+card442 : TODO
+
+state "[[https://trello.com/c/thSPma3j Головоломки]]" as card95 <<hot>> <<todo>> <<CARD_TYPE_2-1>> <<p1>> {
+ json Described_card95 {
+  "To Create": 8
+}
+}
+card95 : EPIC - P1
+card95 : TODO
+
+state "[[https://trello.com/c/kmnl1upe \nПредметы/Мобы/Механика]]" as card448  <<todo>> <<CARD_TYPE_2-1>> <<p1>> {
+ json Described_card448 {
+  "To Create": 102
+}
+
+  state "[[https://trello.com/c/Z95d535p Портал]]" as card492  <<todo>> <<CARD_TYPE_2-2>> <<p1>> {
+
+    state "[[https://trello.com/c/4kKnQmT6 Общее Портал]]" as card493 <<hot>> <<todo>> <<CARD_TYPE_2-3>> <<p1>> {
+ json " " as Checklists_card493 {
+  "Tasks": [
+    "<color:green>**CODE** Сделать объект портала",
+    "**ART** Изображение выключенного портала",
+    "**ART** Изображение активного портала",
+    "**PARTICLE** Частицы активного портала",
+    "**PARTICLE** Частицы входа и выхода портала, когда в него кто-то заходит",
+    "**CODE** Сделать триггер включения/выключения портала"
+  ]
+}
+    }
+    card493 : PART - P1
+    card493 : TODO
+
+    state "[[https://trello.com/c/x5xQmiVA Прямой портал]]" as card494 <<hot>> <<todo>> <<CARD_TYPE_2-3>> <<p1>> {
+ json " " as Checklists_card494 {
+  "Tasks": [
+    "<color:green>**CODE** Сделать бесшовную телепортацию для прямого портала",
+    "**CODE** Пофикстать проблему колижн боксом при телепортации"
+  ]
+}
+    }
+    card494 : PART - P1
+    card494 : TODO
+
+    state "[[https://trello.com/c/kWCvQNgS Обратный портал]]" as card495  <<todo>> <<CARD_TYPE_2-3>> <<p2>> {
+ json " " as Checklists_card495 {
+  "Tasks": [
+    "**CODE** Сделать бесшовную телепортацию для обратного портала",
+    "**GAME DESIGN** Решить проблему инвертирования управления",
+    "**CODE** Сделать фикс для инвертирования управления",
+    "**ART** Изображение обратного портала. Чтобы отличать от прямого. OPTIONAL"
+  ]
+}
+    }
+    card495 : PART - P2
+    card495 : TODO
+
+    state "[[https://trello.com/c/JK9oTYgT Горизонтальный\nпортал]]" as card496  <<todo>> <<CARD_TYPE_2-3>> <<p3>> {
+ json " " as Checklists_card496 {
+  "Tasks": [
+    "**CODE** Сделать бесшовную телепортацию для горизонтального портала"
+  ]
+}
+    }
+    card496 : PART - P3
+    card496 : TODO
+
+    state "[[https://trello.com/c/cESy34mn Портал под углом]]" as card497  <<todo>> <<CARD_TYPE_2-3>> <<p3>> {
+ json " " as Checklists_card497 {
+  "Tasks": [
+    "**CODE** Сделать бесшовную телепортацию для портала под углом"
+  ]
+}
+    }
+    card497 : PART - P3
+    card497 : TODO
+
+    state "[[https://trello.com/c/GFAuB1PL Портал на подвижной\nплатформе]]" as card498  <<todo>> <<CARD_TYPE_2-3>> <<p2>> {
+ json " " as Checklists_card498 {
+  "Tasks": [
+    "**QA** Проверить что все работает на подвижных платформах"
+  ]
+}
+    }
+    card498 : PART - P2
+    card498 : TODO
+
+    state "[[https://trello.com/c/4bJAuoUo Установка портала\nигроком]]" as card499  <<todo>> <<CARD_TYPE_2-3>> <<p3>> {
+     }
+    card499 : PART - P3
+    card499 : TODO
+  }
+  card492 : FEATURE - P1
+  card492 : TODO
+
+  state "[[https://trello.com/c/1Voarb9B Ящик]]" as card500 <<hot>> <<todo>> <<CARD_TYPE_2-2>> <<p1>> {
+ json " " as Checklists_card500 {
+  "**Item** Общее Ящик": [
+    "<color:green>**CODE** Сделать объект для ящика",
+    "**ART** Нарисовать ящик"
+  ],
+  "**Mechanic** Толкание предметов": [
+    "**CODE** Сделать возможность толкать предметы"
+  ]
+}
+  }
+  card500 : FEATURE - P1
+  card500 : TODO
+}
+card448 : EPIC - P1
+card448 : TODO
+
+state "[[https://trello.com/c/5RnEewpx Локации]]" as card93  <<todo>> <<CARD_TYPE_2-1>> <<p2>> {
+ json Described_card93 {
+  "To Create": 206
+}
+
+  state "[[https://trello.com/c/3UuKlJdp Деревня]]" as card501  <<todo>> <<CARD_TYPE_2-2>> <<p2>> {
+
+    state "[[https://trello.com/c/GVQraAKf Тайлсет деревни]]" as card502  <<todo>> <<CARD_TYPE_2-3>> <<p2>> {
+
+      state "[[https://trello.com/c/2cultoZp Нарисовать концепт\nдеревни]]" as card503  <<done>> <<CARD_TYPE_2-4>> <<p2>> {
+       }
+      card503 : TASK - P2
+      card503 : DONE
+    }
+    card502 : PART - P2
+    card502 : TODO
+  }
+  card501 : FEATURE - P2
+  card501 : TODO
+}
+card93 : EPIC - P2
+card93 : TODO
+
+state "[[https://trello.com/c/N0VExjfO Неписи с диалогами]]" as card96  <<todo>> <<CARD_TYPE_2-1>> <<p3>> {
+ json Described_card96 {
+  "To Create": 1
+}
+}
+card96 : EPIC - P3
+card96 : TODO
+
+state "[[https://trello.com/c/GvaRpKQJ Менюшки]]" as card97  <<todo>> <<CARD_TYPE_2-1>> <<p3>> {
+ json Described_card97 {
+  "To Create": 84
+}
+}
+card97 : EPIC - P3
+card97 : TODO
+
+state "[[https://trello.com/c/7ZQSXg5t Заставки]]" as card94  <<todo>> <<CARD_TYPE_2-1>> <<p4>> {
+ json Described_card94 {
+  "To Create": 11
+}
+}
+card94 : EPIC - P4
+card94 : TODO
+
+state "[[https://trello.com/c/cte6TUFC Собрать ассеты]]" as card452  <<inprogress>> <<CARD_TYPE_2-4>> <<p1>> {
+ json " " as Checklists_card452 {
+  "Чек-лист": [
+    "Звуковые эффекты",
+    "Уровни",
+    "Визуальные эффекты",
+    "Модели окружения",
+    "Модели персонажей",
+    "UI элементы"
+  ]
+}
+}
+card452 : TASK - P1
+card452 : IN PROGRESS
+
+state "[[https://trello.com/c/2LToqcoJ Test]]" as card504  <<intest>> <<CARD_TYPE_2-1>> <<p2>> {
+ json Described_card504 {
+  "To Create": 6
+}
+
+  state "[[https://trello.com/c/glvOOdYI TEST Общее]]" as card526  <<intest>> <<CARD_TYPE_2-2>> <<p2>> {
+ json " " as Checklists_card526 {
+  "TEST Режим заставки": [
+    "**CODE** TEST Сделать режим показа заставки",
+    "**CODE** TEST Сделать перемещение энтитей по сценарию",
+    "**CODE** TEST Сделать триггер начала заставки"
+  ]
+}
+  }
+  card526 : FEATURE - P2
+  card526 : IN TEST
+}
+card504 : EPIC - P2
+card504 : IN TEST
+
+state "Перел" as card88 <<closed>> {
+ }
+card88 : CLOSED
+
+state "Дать " as card447 <<closed>> {
+ }
+card447 : CLOSED
+
+state "Описа" as card7 <<closed>> {
+ }
+card7 : CLOSED
+card449 --> card442
+card449 --> card448
+card449 --> card96
+card448 --> card95
+card93 --> card96
+card96 --> card94
+
+
+card493 --> card494
+card494 --> card495
+card494 --> card498
+card494 --> card496
+card494 --> card499
+card495 --> card496
+card496 --> card497
+card476 --> card477
+card476 --> card478
+card479 --> card480
+card479 --> card481
+
+
+
+        @enduml

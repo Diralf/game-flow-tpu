@@ -95,7 +95,6 @@ class Links {
     const availableTypes = options.direction
       ? await this.getAvailableTypes(t, type, options.direction)
       : [type];
-    console.log({ availableTypes });
     const isAddEnabled =
       (!options.single || options.linkCount === 0) && availableTypes.length > 0;
     const isCreateEnabled = isAddEnabled && options.isCreateAllowed;
@@ -278,18 +277,31 @@ class Links {
     return await this.findParentCardIcon(t, parentCard.id, fieldName);
   }
 
+  async getParentsChainName(t, fieldName, cardId = 'card') {
+    const parentCard = await t.get(cardId, "shared", fieldName + "Card");
+    if (parentCard) {
+      const nextParentNames = await this.getParentsChainName(t, fieldName, parentCard.id);
+      if (nextParentNames) {
+        return [parentCard.name, nextParentNames].join(' | ');
+      } else {
+        return parentCard.name;
+      }
+    }
+    return null;
+  }
+
   async singleCardBadge(t, fieldName) {
-    const card = await t.get("card", "shared", fieldName + "Card");
-    if (!card) {
-      return {};
+    const parentChainName = await this.getParentsChainName(t, fieldName);
+    if (!parentChainName) {
+      return null;
     }
     const cardIcon = await this.findParentCardIcon(t, "card", fieldName);
     return {
       icon:
         cardIcon?.icon ??
         "https://cdn.glitch.com/1b42d7fe-bda8-4af8-a6c8-eff0cea9e08a%2Frocket-ship.png?1494946700421",
-      text: card.name,
-      color: 'light-gray'//cardIcon?.color,
+      text: parentChainName,
+      // color: 'light-gray'//cardIcon?.color,
     };
   }
 
@@ -319,7 +331,7 @@ class Links {
     return cards
       .map((card, index) => ({ card, type: typeCards[index] }))
       .filter(
-        ({ type }) => !!availableTypes.find((typeObj) => typeObj.name === type)
+        ({ type }) => !!availableTypes.find((typeObj) => typeObj.id === type)
       )
       .map(({ card }) => card);
   }

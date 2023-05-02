@@ -1,4 +1,4 @@
-class Childes extends Links {
+class Childes extends window.Links {
     constructor() {
         super();
         this.childesTitle = 'Children';
@@ -29,16 +29,13 @@ class Childes extends Links {
     async createChildCard(t, name, options) {
         const {severity, cardType} = await t.get(options.currentCardId, 'shared');
         const newType = (await window.cardType.getTypeRelation(t, cardType, options.direction))[0];
-        console.log(newType, cardType);
         if (newType) {
             const {idList} = await t.card('idList');
-            console.log(options, idList);
             try {
                 const newCard = await createCard(t, {
                     name: name,
                     idList
                 });
-                console.log(newCard);
                 await t.set(newCard.id, 'shared', {
                     severity,
                     cardType: newType
@@ -60,5 +57,6 @@ class Childes extends Links {
         t.closePopup();
     }
 }
+
 
 window.childes = new Childes();

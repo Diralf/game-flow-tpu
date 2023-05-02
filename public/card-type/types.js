@@ -77,14 +77,17 @@ class CardType extends window.AbstractList {
         const icon = type.toLowerCase().includes('bug') 
           ? 'https://cdn.glitch.com/36da036c-f499-46a1-aa9f-1e196ed62696%2Fbug-solid.svg?v=1589800839792' 
           : 'https://cdn.glitch.com/36da036c-f499-46a1-aa9f-1e196ed62696%2Fcogs-solid.svg?v=1589801018782';
+        const id = typeObj.id ?? type;
         return [
-          type,
+          id,
           {
+            id, 
             name: type,
             shortName: typeObj.shortName ?? type,
-            color: 'light-gray',//color[0],
+            // color: 'light-gray',//color[0],
             umlColor: color[1],
             icon: customIcon ?? icon,
+            prevId: typeObj.prevId,
           }
         ];
       })
@@ -92,14 +95,20 @@ class CardType extends window.AbstractList {
     }
     return this.typesMap;
   }
+
+  async getTypeByName(t, typeName) {
+    const typesMap = await this.getTypesMap(t);
+    const typesArray = Array.from(typesMap);
+    const typePair = typesArray.find(([id, type]) => type.name === typeName);
+    return typePair ? typePair[1] : null;
+  }
   
   async findTypeLevelIndex(t, currentCardType) {
     const typeRelations = await this.getTypesRelations(t);
-    return typeRelations.findIndex(level => !!level.find((typeObj) => typeObj.name === currentCardType))
+    return typeRelations.findIndex(level => !!level.find((typeObj) => typeObj.id === currentCardType))
   }
 
   async getTypeRelation(t, currentCardType, direction) {
-    console.log('getTypeRelation');
     const typeRelations = await this.getTypesRelations(t);
     const currentCardLevelIndex = await this.findTypeLevelIndex(t, currentCardType);
     const availableTypes = typeRelations[currentCardLevelIndex + direction];
@@ -114,7 +123,8 @@ class CardType extends window.AbstractList {
         title: 'Define Card Types',
         url: './card-type/define-types.html'
       }),
-      condition: 'signedIn'
+      condition: 'signedIn',
+      icon: "https://cdn.glitch.com/36da036c-f499-46a1-aa9f-1e196ed62696%2Fbug-solid.svg?v=1589800839792",
     }
 
   }

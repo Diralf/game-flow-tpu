@@ -26,6 +26,8 @@ TrelloPowerUp.initialize({
       window.uml.buildBoardButton(t),
       window.cardType.buildBoardButton(t),
       window.cardIcon.buildBoardButton(t),
+      window.openSettingsBoardButton(t),
+      window.cardGenerator.buildBoardButton(t),
     ];
   },
   "card-buttons": function(t, options) {
@@ -41,18 +43,21 @@ TrelloPowerUp.initialize({
           });
         }
       },
-      window.cardIcon.buildCardButton(t)
+      window.cardIcon.buildCardButton(t),
+      window.cardGenerator.buildCardButton(t),
+      window.cardGenerator.buildCardButtonUpdateDescription(t)
     ];
   },
   "card-badges": async function(t, options) {
     return [
       // [await t.card('idShort'), card => ({text: `#${card.idShort}`})],
-      await window.cardType.cardBadge(t),
-      await window.cardIcon.cardBadge(t),
-      await window.childes.parentSingleCardBadge(t),
       await window.severity.cardBadge(t),
+      await window.cardIcon.cardBadge(t),
+      await window.cardType.cardBadge(t),
+      await window.childes.parentSingleCardBadge(t),
+      await window.linksInDesc.createBadge(t),
       ...(await window.linkInStatus.createBadges(t)),
-      await window.idleTime.cardBadge(t)
+      // await window.idleTime.cardBadge(t)
     ];
   },
   "card-detail-badges": async function(t, options) {
@@ -65,6 +70,20 @@ TrelloPowerUp.initialize({
       await window.depends.parentsCardDetailBadge(t, {direction: 0}),
       await window.depends.childesCardDetailBadge(t, {direction: 0}),
       ...(await window.linkInStatus.createDetailBadges(t)),
+      await (async (t) => {
+        const taskId = await t.get('card', 'shared', 'taskId');
+
+        if (!taskId) {
+          return null;
+        }
+
+        return {
+          title: 'TASK ID',
+          text: `#${taskId}`,
+          // color: "light-gray",
+          //refresh: 6000
+        };
+      })(t),
       {
         title: 'Create Card',
         text: 'New Card',
