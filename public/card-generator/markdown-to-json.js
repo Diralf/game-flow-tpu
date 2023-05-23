@@ -38,6 +38,7 @@ export const getSectionJson = (lines, sectionName, required = false) => {
     let metadata = {};
     let mdLines = [];
     let url = null;
+    let nameFromUrl = null;
 
     function applyMetadata() {
         const validDescriptionParts = descriptionParts.filter(descPart => descPart.length > 0);
@@ -50,6 +51,9 @@ export const getSectionJson = (lines, sectionName, required = false) => {
         if (url) {
             currentObject.url = url;
         }
+        if (!currentObject.name && nameFromUrl) {
+            currentObject.name = nameFromUrl;
+        }
         // currentObject.mdLines = mdLines;
         descriptionParts = [];
         metadata = {};
@@ -60,9 +64,20 @@ export const getSectionJson = (lines, sectionName, required = false) => {
     sectionLines.forEach((line, index) => {
         if (line.match(/^[ ]*- /)) {
             applyMetadata();
+            const metadataUrl = line.match(/\[meta\]\(([^)]*)\)/)?.[1];
+            let nameFromMetaUrl = null;
+            if (metadataUrl) {
+                const parsedUrl = new URL(metadataUrl).searchParams;
+                nameFromMetaUrl = parsedUrl.get('name') ?? null;
+                parsedUrl.forEach((value, key) => {
+                    if (key !== 'name') {
+                        metadata[key] = value;
+                    }
+                });
+            }
             currentObject = {
                 mdLine: line,
-                name: getNameFromLine(line),
+                name: nameFromMetaUrl ?? getNameFromLine(line),
                 lineIndex: index + startIndex,
             };
             const fromTemplate = line.match(/- `(\w+)`/);
@@ -76,9 +91,15 @@ export const getSectionJson = (lines, sectionName, required = false) => {
             setValueByPath(features, currentPath, currentObject);
             currentPath.push(line);
 
-            const oldLabel = line.match(/\*\*(\w+)\*\*/);
+            const oldLabel = line.match(/\*\*([\w ]+)\*\*/);
             if (oldLabel?.[1]) {
                 metadata.label = oldLabel[1];
+            }
+            if (line.endsWith(' -')) {
+                metadata.to = 'SINGLE_CHECKLIST_CARD';
+            }
+            if (line.endsWith(' =')) {
+                metadata.to = 'MULTI_CHECKLIST_CARD';
             }
         } else {
             const descPart = getDescription(line);
@@ -88,6 +109,7 @@ export const getSectionJson = (lines, sectionName, required = false) => {
         const validUrl = getURLFromLine(line);
         if (validUrl) {
             url = validUrl;
+            nameFromUrl = getNameFromURL(validUrl);
         }
         metadata = {
             ...metaDataInLine,
@@ -106,12 +128,24 @@ const getNameFromLine = (mdLine) => {
     return mdLine
         .slice(listItemIndex + 2)
         .replace(linkRegExp, '')
+        .replace(/\[meta\]\(([^)]*)\)/, '')
         .replaceAll(/`\w+=\w+`/g, '')
-        .replace(/\*\*\w+\*\*/, '')
+        .replace(/\*\*[\w ]+\*\*/, '')
         .replace(/#\w+/, '')
         .replace('[x]', '')
+        .replace(/ -$/, '')
+        .replace(/ =$/, '')
         .trim();
 };
+
+function getNameFromURL(validUrl) {
+    const result = validUrl.match(/\[([^\]]*)]/);
+    if (result && result[1] && !result[1].startsWith('http')) {
+        return result[1];
+    }
+    return null;
+}
+
 const getMetadataFromLine = (line) => {
     const values = line.match(/`\w+=\w+`/g) ?? [];
     return values.reduce((acc, keyValueString) => {

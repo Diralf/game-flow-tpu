@@ -23,7 +23,7 @@ describe('template of tasks', function () {
   - Some Part 2 1
     - Some Task 2 1
     Some Task 2 1 Description \`id=234\`
-    - Some Task 2 2
+    - **GAME DESIGN** Some Task 2 2
   - Some Part 2 2
     - \`TEMPLATE\`
 ## End Tasks
@@ -99,9 +99,12 @@ describe('template of tasks', function () {
                                     },
                                 },
                                 {
-                                    mdLine: "    - Some Task 2 2",
+                                    mdLine: "    - **GAME DESIGN** Some Task 2 2",
                                     name: "Some Task 2 2",
                                     "lineIndex": 20,
+                                    metadata: {
+                                        label: 'GAME DESIGN'
+                                    }
                                 },
                             ]
                         },
@@ -345,6 +348,51 @@ Continue Some Task 2 Description
                     "mdLine": "- TEST Концовка",
                     "name": "TEST Концовка"
                 }
+            ],
+            templateJson: []
+        };
+
+        const result = markdownToJson(mdText);
+        // expect(result.tasksJson).toHaveLength(11);
+        expect(result).toMatchObject(expected);
+    });
+
+    it('should get metadata from short url', () => {
+        const mdText = `# Tasks
+- [test://123](test://123 "smartCard-inline") [meta](https://metadata/?name=Some%20Feature%201&id=123&to=MULTI_CHECKLIST_CARD)
+  - Some Part 1 [meta](https://metadata/?checklist=1231)
+
+## End Tasks
+
+# Legend
+
+- FEATURE
+  - PART
+    - TASK
+      - SUB-TASK
+
+## End Legend`;
+
+        const expected = {
+            tasksJson: [
+                {
+                    "mdLine": "- [test://123](test://123 \"smartCard-inline\") [meta](https://metadata/?name=Some%20Feature%201&id=123&to=MULTI_CHECKLIST_CARD)",
+                    "name": "Some Feature 1",
+                    url: "[test://123](test://123 \"smartCard-inline\")",
+                    metadata: {
+                        id: '123',
+                        to: 'MULTI_CHECKLIST_CARD',
+                    },
+                    "children": [
+                        {
+                            "mdLine": "  - Some Part 1 [meta](https://metadata/?checklist=1231)",
+                            "name": "Some Part 1",
+                            metadata: {
+                                checklist: '1231',
+                            },
+                        }
+                    ],
+                },
             ],
             templateJson: []
         };

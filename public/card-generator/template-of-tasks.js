@@ -9,16 +9,17 @@ export const findTemplateEntries = (templateJson = []) => {
     if (!Array.isArray(templateJson)) {
         return [];
     }
-    const isTemplateValue = mdValue => mdValue.name.match(/`\w+`/) && mdValue.children?.length > 0;
+    const isTemplateValue = mdValue => (mdValue.name.match(/`\w+`/) || mdValue.fromTemplate || mdValue.metadata?.tid)
+        && mdValue.children?.length > 0;
     const templateValues = templateJson.filter(mdValue => isTemplateValue(mdValue));
     const nonTemplateValues = templateJson.filter(mdValue => !isTemplateValue(mdValue));
 
     const templateEntries = templateValues.map((mdValue) => {
-        const templateName = mdValue.name.match(/`(\w+)`/);
-        return [templateName[1], mdValue.children];
+        const templateName = (mdValue.name.match(/`(\w+)`/)?.[1]) || mdValue.fromTemplate || mdValue.metadata?.tid;
+        return [templateName, mdValue.children];
     });
 
-    const otherEntries = nonTemplateValues.flatMap(mdValue => findTemplateEntries(mdValue.children ?? []));
+    const otherEntries = templateJson.flatMap(mdValue => findTemplateEntries(mdValue.children ?? []));
 
     return [
         ...templateEntries,

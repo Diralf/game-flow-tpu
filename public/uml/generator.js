@@ -82,6 +82,37 @@ class UmlGenerator {
       .join("\n");
 
     const finalResult = `@startuml\n
+        <style>
+          .described {
+            BackGroundColor white
+            FontColor black
+          }
+          .checklist {
+            FontColor black
+          }
+          .burn {
+            BackgroundColor #FF2E00
+          }
+          .hot {
+            BackgroundColor #FFC0B2
+          }
+          .blocked {
+            BackgroundColor #FF7452
+          }
+          .inprogress {
+            BackgroundColor #FFC400
+          }
+          .intest {
+            BackgroundColor #66BAFF
+          }
+          .done {
+            BackgroundColor #36B37E
+          }
+          .closed {
+            BackgroundColor #006644
+          }
+          
+        </style>
         skinparam state {
           BackgroundColor #FAFBFC
           BackgroundColor<<todo>> #EBECF0
@@ -159,7 +190,7 @@ class UmlGenerator {
 
     if (card.status === 'closed') {
       stateUml += identText +
-          `state "${card.name.slice(0, 5)}" as ${cardShortName} <<${card.status}>> {\n `;
+          `state "${url}" as ${cardShortName} <<${card.status}>> {\n `;
     } else {
       stateUml +=
           identText +
@@ -167,7 +198,12 @@ class UmlGenerator {
     }
 
     if (countDescribed > 0) {
-      stateUml += `json Described_${cardShortName} ${JSON.stringify({ 'To Create': countDescribed}, null, 2)}\n`
+      const { tasksJson, templateJson } = window.markdownToJson(card.desc);
+      const withTemplates = window.tasksJsonWithTemplates(tasksJson, templateJson);
+      const shortDescribedJson = this.getSimpleTasksJson(withTemplates);
+      if (shortDescribedJson.length > 0) {
+        stateUml += `json Described_${cardShortName} <<described>> ${JSON.stringify({ 'To Create': shortDescribedJson}, null, 2)}\n`
+      }
     }
 
     if (childes) {
@@ -185,16 +221,14 @@ class UmlGenerator {
     if (card.checklists.length > 0) {
       const checklistJson = card.checklists.reduce((acc, checklist) => {
         const haveIncomplete = checklist.checkItems.some(item => item.state === 'incomplete');
-        if (haveIncomplete) {
-          acc[checklist.name] = checklist.checkItems.map(item => {
-            const complete = item.state === 'complete' ? '<color:green>' : '';
-            return complete + item.name;
-          });
-        }
+        acc[checklist.name] = checklist.checkItems.map(item => {
+          const complete = item.state === 'complete' ? '<color:green>' : '';
+          return complete + item.name;
+        });
         return acc;
       }, {});
       if (Object.keys(checklistJson).length > 0) {
-        stateUml += `json " " as Checklists_${cardShortName} ${JSON.stringify(checklistJson, null, 2)}\n`;
+        stateUml += `json " " as Checklists_${cardShortName} <<checklist>> ${highlight} <<${card.status}>> ${JSON.stringify(checklistJson, null, 2)}\n`;
       }
     }
     const severity =
@@ -211,6 +245,26 @@ class UmlGenerator {
     }
 
     return stateUml;
+  }
+
+  getSimpleTasksJson(tasksJson) {
+    const isCardCreated = (task) => task.metadata?.id || task.metadata?.checklist || task.metadata?.checklistItem;
+    return tasksJson
+        .map(task => {
+          const name = task.name;
+          if (task.children) {
+            const childrenTasks = this.getSimpleTasksJson(task.children);
+            if (childrenTasks.length > 0) {
+              return {
+                [name]: childrenTasks
+              };
+            } else {
+              return null;
+            }
+          }
+          return isCardCreated(task) ? null : name;
+        })
+        .filter((result) => !!result)
   }
 
   getName(name) {

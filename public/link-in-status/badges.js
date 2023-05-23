@@ -1,9 +1,9 @@
 class LinkInStatus {
 
     async createBadges(t) {
+        const countsForType = await this.countForStatus(t);
         return listType.listTypes.map(type => ({
             dynamic: async () => {
-                const countsForType = await this.countForStatus(t);
                 const text = countsForType[type.id] ? countsForType[type.id].length : null;
                 return {
                     text,
@@ -75,6 +75,45 @@ class LinkInStatus {
             countsForType[typeId].push(...countsInList[listId]);
         }
         return countsForType;
+    }
+
+    async createChecklistBadge(t) {
+        const countsForType = await this.countForStatus(t);
+        return {
+            dynamic: async (t) => {
+                const currentCard = await t.card('id', 'badges');
+                const allCards = await t.cards('id', 'badges');
+                const { checkItemsChecked, checkItems } = await this.getAllChecklistChildren(t, allCards, currentCard.id);
+                if (checkItems > 0 && checkItems !== currentCard?.badges?.checkItems) {
+                    return {
+                        text: `All: ${checkItemsChecked}/${checkItems}`,
+                        // color: 'blue',
+                        refresh: 60
+                    }
+                }
+                return null;
+            }
+        };
+    }
+
+    async getAllChecklistChildren(t, cards, cardId) {
+        try {
+            const currentCard = cards.find(card => card.id === cardId);
+            let checkItems = currentCard.badges?.checkItems ?? 0;
+            let checkItemsChecked = currentCard.badges?.checkItemsChecked ?? 0;
+
+            const children = await t.get(cardId, 'shared', window.links.childesFieldName, []);
+            for (const childId of children) {
+                const child = await this.getAllChecklistChildren(t, cards, childId);
+                checkItems += child.checkItems;
+                checkItemsChecked += child.checkItemsChecked;
+            }
+
+            return { checkItems, checkItemsChecked };
+        } catch (e) {
+            console.error(e);
+            return { checkItems: 0, checkItemsChecked: 0 };
+        }
     }
 }
 

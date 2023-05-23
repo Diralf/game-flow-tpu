@@ -1,0 +1,14 @@
+{
+  "name": "@trebor/zoomable-voronoi-treemap",
+  "main": "9aada2731a2a6539@2353.js",
+  "version": "2353.0.0",
+  "homepage": "https://observablehq.com/@trebor/zoomable-voronoi-treemap",
+  "author": {
+    "name": "Robert Harris",
+    "url": "https://observablehq.com/@trebor"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4 - 5"
+  }
+}

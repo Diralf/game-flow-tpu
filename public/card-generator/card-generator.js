@@ -77,6 +77,15 @@ import {getCardByAnyId, getCheckListById} from "./getCardByAnyId.js";
  */
 class CardGenerator {
 
+    constructor() {
+        this.sizeNames = [
+            'XL',
+            'L',
+            'M',
+            'S',
+        ];
+    }
+
     log(t, message, ...opts) {
         if (typeof message === "string") {
             t.alert({ message });
@@ -152,8 +161,9 @@ class CardGenerator {
             callback: async (t) => {
                 const currentCard = await t.card('id', 'name', 'desc', 'idList');
                 const cardsOnTheBoard = await getExistingCards(t);
-                const { legendJson, tasksJson } = markdownToJson(currentCard.desc);
+                const { legendJson, tasksJson, templateJson } = markdownToJson(currentCard.desc);
                 const board = await t.board('labels');
+                const templateDescribedCards = jsonToCardsList(legendJson, templateJson, 'test_card' + '_template');
 
                 const describedCards = jsonToCardsList(legendJson, tasksJson, currentCard.id);
 
@@ -168,7 +178,10 @@ class CardGenerator {
                     await this.updateCards(t, cardsToUpdate, board.labels);
                     const cardsToUpdateAgain = await this.getCardsToUpdate(t, describedCards, cardsOnTheBoard);
                     await this.updateCards(t, cardsToUpdateAgain, board.labels);
-                    await this.updateRootDescription(t, currentCard, describedCards);
+                });
+
+                await this.delay(async () => {
+                    await this.updateRootDescription(t, currentCard, describedCards, templateDescribedCards);
                     this.log(t, 'GENERATION FINISHED');
                 });
             },
@@ -181,9 +194,10 @@ class CardGenerator {
             text: "Update Description",
             callback: async (t) => {
                 const currentCard = await t.card('id', 'name', 'desc', 'idList');
-                const { legendJson, tasksJson } = markdownToJson(currentCard.desc);
+                const { legendJson, tasksJson, templateJson } = markdownToJson(currentCard.desc);
                 const describedCards = jsonToCardsList(legendJson, tasksJson, currentCard.id);
-                await this.updateRootDescription(t, currentCard, describedCards);
+                const templateDescribedCards = jsonToCardsList(legendJson, templateJson, 'test_card' + '_template');
+                await this.updateRootDescription(t, currentCard, describedCards, templateDescribedCards);
             },
         };
     }
@@ -276,8 +290,8 @@ class CardGenerator {
         this.log(t, 'Start creating of checklist items...');
         const toChecklistItem = describedCards.filter(descCard => descCard.shouldHaveChecklistItem);
         const results = [];
+        const cardsOnTheBoard = await getExistingCards(t);
         for (const cardDesc of toChecklistItem) {
-            const cardsOnTheBoard = await getExistingCards(t);
             const checklistOwnerCard = cardDesc.checklistOwnerCard ? this.getCardByAnyId(cardsOnTheBoard, cardDesc.checklistOwnerCard?.id) : null;
             const checkLists = checklistOwnerCard?.checklists ?? [];
             let checklist = this.getCheckListById(checkLists, cardDesc.parentCard?.id) ?? checkLists.find((checklist) => checklist.name === 'Tasks');
@@ -344,6 +358,25 @@ class CardGenerator {
             }
 
             try {
+                const metaSize = cardInfo?.mdTask?.metadata?.size?.toUpperCase();
+                if (metaSize) {
+                    const sizeIndex = this.sizeNames.indexOf(metaSize);
+                    await t.set(createdCard.id, 'shared', 'estimation', sizeIndex);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
+            try {
+                const metaPriority = +cardInfo?.mdTask?.metadata?.priority;
+                if (!isNaN(metaPriority)) {
+                    await t.set(createdCard.id, 'shared', 'severity', metaPriority);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
+            try {
                 await window.cardIcon.addAllNewParentLabelsToCard(t, createdCard.id);
             } catch (e) {
                 console.error(e);
@@ -400,18 +433,36 @@ class CardGenerator {
             .filter(({ createdCard }) => !!createdCard)
             .filter(({ createdCard, parentCard, cardInfo }) => {
                 const isParentValid = !parentCard || createdCard.plugin?.parentsCard?.id === parentCard?.id;
+
                 const type = types.find((type) => type?.name === cardInfo.taskType);
                 const isTypeValid = !type || createdCard.plugin?.cardType === type.id;
+
                 const cardLabel = cardInfo.label ? this.getBoardLabel(createdCard.labels, cardInfo) : null;
                 const isLabelValid = !cardInfo.label || !!cardLabel;
-                return !isParentValid || !isTypeValid || !isLabelValid;
+
+                const metadataSize = cardInfo?.mdTask?.metadata?.size?.toUpperCase();
+                const cardSize = this.sizeNames[createdCard.plugin?.estimation];
+                const cardSizeValid = !metadataSize || metadataSize === cardSize;
+
+                const metadataPriority = +cardInfo?.mdTask?.metadata?.priority;
+                const cardPriority = createdCard.plugin?.severity;
+                const cardPriorityValid = isNaN(metadataPriority) || metadataPriority === cardPriority;
+
+                return !isParentValid || !isTypeValid || !isLabelValid || !cardSizeValid || !cardPriorityValid;
             });
     }
 
-    async updateRootDescription(t, currentCard, describedCards) {
+    async updateRootDescription(t, currentCard, describedCards, templateDescribedCards) {
         this.log(t, 'Start root card description update...');
         const cardsOnTheBoard = await getExistingCards(t);
-        const newDesc = await updateRootDescription(currentCard.desc, describedCards, cardsOnTheBoard);
+
+        const newDesc = await updateRootDescription(
+            currentCard.desc,
+            describedCards,
+            cardsOnTheBoard,
+            templateDescribedCards,
+            false,
+        );
 
         const updatedCard = await updateCard(t, currentCard.id, { desc: newDesc }, false);
         this.log(t, `Root card description updated for cards.`, updatedCard);

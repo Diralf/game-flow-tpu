@@ -1,0 +1,14 @@
+{
+  "name": "@thejustincase/d3-zoomable-circle-packing-multicolored",
+  "main": "38336ea9b593610c@660.js",
+  "version": "660.0.0",
+  "homepage": "https://observablehq.com/@thejustincase/d3-zoomable-circle-packing-multicolored",
+  "author": {
+    "name": "Justin Brown",
+    "url": "https://observablehq.com/@thejustincase"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4 - 5"
+  }
+}

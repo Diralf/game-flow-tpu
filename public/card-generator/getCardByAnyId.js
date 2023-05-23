@@ -9,7 +9,6 @@ export const getCardByAnyId = (cards, targetId, targetName = null) => {
 export const getCheckListById = (checklists, targetId, targetName = null) => {
     return checklists.find((checklist) => {
         return checklist.id === targetId ||
-            checklist.name.includes(`\`tempId=${targetId}\``) ||
-            checklist.name.replace(/\*\*\w+\*\*/, '').trim() === targetName;
+            checklist.name.replace(/\*\*[\w ]+\*\*/, '').trim() === targetName;
     });
 }

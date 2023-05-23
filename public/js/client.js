@@ -24,10 +24,11 @@ TrelloPowerUp.initialize({
     },
       window.listType.createBoardButton(t),
       window.uml.buildBoardButton(t),
+      window.d3gen.buildBoardButton(t),
       window.cardType.buildBoardButton(t),
       window.cardIcon.buildBoardButton(t),
       window.openSettingsBoardButton(t),
-      window.cardGenerator.buildBoardButton(t),
+      window.cardGenerator?.buildBoardButton(t),
     ];
   },
   "card-buttons": function(t, options) {
@@ -44,19 +45,21 @@ TrelloPowerUp.initialize({
         }
       },
       window.cardIcon.buildCardButton(t),
-      window.cardGenerator.buildCardButton(t),
-      window.cardGenerator.buildCardButtonUpdateDescription(t)
+      window.cardGenerator?.buildCardButton(t),
+      window.cardGenerator?.buildCardButtonUpdateDescription(t)
     ];
   },
   "card-badges": async function(t, options) {
     return [
       // [await t.card('idShort'), card => ({text: `#${card.idShort}`})],
       await window.severity.cardBadge(t),
+      await window.estimation.cardBadge(t),
       await window.cardIcon.cardBadge(t),
       await window.cardType.cardBadge(t),
       await window.childes.parentSingleCardBadge(t),
       await window.linksInDesc.createBadge(t),
       ...(await window.linkInStatus.createBadges(t)),
+      await window.linkInStatus.createChecklistBadge(t),
       // await window.idleTime.cardBadge(t)
     ];
   },
@@ -65,6 +68,7 @@ TrelloPowerUp.initialize({
       await window.cardIcon.cardDetailBadge(t),
       await window.cardType.cardDetailBadge(t),
       await window.severity.cardDetailBadge(t),
+      await window.estimation.cardDetailBadge(t),
       await window.childes.parentsCardDetailBadge(t, {singleParent: true}),
       await window.childes.childesCardDetailBadge(t, {singleParent: true, isCreateAllowed: true}),
       await window.depends.parentsCardDetailBadge(t, {direction: 0}),

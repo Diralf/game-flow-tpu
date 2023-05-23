@@ -51,8 +51,7 @@ app.get('/api/svg/:uml', function(req, res) {
     var gen = plantuml.generate({format: 'svg'});
 
     decode.out.pipe(gen.in);
-    gen.out.pipe(res);
-    res.end();
+    gen.out.pipe(res).end();
 });
 
 app.post('/api/uml/img', bodyParser.json(), function(req, res) {

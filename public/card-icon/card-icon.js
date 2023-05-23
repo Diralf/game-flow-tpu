@@ -250,7 +250,7 @@ class CardIcon extends window.AbstractList {
   async getLabelsOfCard(t, cardId) {
     const cards = await t.cards("id", "labels");
     const card = cards.find((card) => card.id === cardId);
-    return card.labels;
+    return card?.labels ?? [];
   }
 }
 

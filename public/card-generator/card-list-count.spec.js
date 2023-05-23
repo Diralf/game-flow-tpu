@@ -55,6 +55,29 @@ describe('card-list-count', () => {
     - Some Task 2
 `,
             expectedCount: 10,
+        },
+        {
+            desc: 'with templates and some implemented',
+            tasksText: `
+- Feature 1
+  - \`TEMPLATE\`
+  - Some Part
+    \`tid=TEMPLATE__1\`
+- Feature 2
+  - \`TEMPLATE\`
+- Feature 3
+  - Own Part  
+`,
+            template: `
+- \`TEMPLATE\`
+  - Some Part
+    \`tid=TEMPLATE__1\`
+    - Some Task 1
+      \`tid=TEMPLATE__2\`
+    - Some Task 2
+      \`tid=TEMPLATE__3\`
+`,
+            expectedCount: 10,
         }
     ])('Should count card $desc', ({tasksText, template, expectedCount}) => {
         const templateText = template ? `\n# Template\n${template}\n## End Template` : '';

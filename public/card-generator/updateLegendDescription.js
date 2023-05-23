@@ -12,6 +12,11 @@ export const updateLegendDescription = () => {
   - \`to=SINGLE_CHECKLIST_CARD\`
   - \`to=CHECKLIST\`
   - \`to=CHECKLIST_ITEM\`
+- Estimations
+  - \`size=XL\`
+  - \`size=L\`
+  - \`size=M\`
+  - \`size=S\`
 
 ## End Legend`;
 }
