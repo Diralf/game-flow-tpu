@@ -153,7 +153,7 @@ class D3Generator {
                 description: '', // item.card?.desc || item.task?.description || '',
                 type: this.typesMap.get(item.card?.shared?.cardType) ?? this.typesArray[item.path.length]?.[1] ?? '',
                 priority: this.priorityNames[item.priority ?? 2] ?? '',
-                size: this.sizeNames[item.size ?? -1] ?? '',
+                size: item.sizeName ?? '',
                 area: this.areas.find(area => item.labels?.includes(area)) ?? '',
                 status: item.status?.toUpperCase() ?? 'TODO',
                 labels: item.labels?.filter(label => !this.areas.includes(label)).join(', ') ?? '',
@@ -306,6 +306,7 @@ class D3Generator {
         return {
             name: card.name,
             size: this.getCardSize(card.shared.estimation),
+            sizeName: this.sizeNames[card.shared.estimation],
             value: 1,
             color: this.getColorByStatus(this.isBurnStatus(card.status, priority)),
             labels: card.labels?.map(label => label.name.replace('*', '').trim().toUpperCase()) ?? [],
@@ -334,6 +335,7 @@ class D3Generator {
         return {
             name: task.name,
             size: this.getCardSize(this.sizeNames.indexOf(task?.metadata?.size?.toUpperCase() ?? 'M')),
+            sizeName: task?.metadata?.size?.toUpperCase(),
             value: 1,
             color,
             labels: [task?.metadata?.label?.trim().toUpperCase()],
