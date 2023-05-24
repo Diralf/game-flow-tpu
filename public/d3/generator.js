@@ -145,7 +145,10 @@ class D3Generator {
         return cardsArray.map(item => {
             const [epic, feature, part, task] = (item.path ?? []).map(pathCard => pathCard.name);
             return {
-                epic, feature, part, task,
+                epic: epic ?? '',
+                feature: feature ?? '',
+                part: part ?? '',
+                task: task ?? '',
                 name: item.name,
                 description: '', // item.card?.desc || item.task?.description || '',
                 type: this.typesMap.get(item.card?.shared?.cardType) ?? this.typesArray[item.path.length]?.[1] ?? '',
