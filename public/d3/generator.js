@@ -145,18 +145,18 @@ class D3Generator {
         return cardsArray.map(item => {
             const [epic, feature, part, task] = (item.path ?? []).map(pathCard => pathCard.name);
             return {
-                epic: epic ?? '',
-                feature: feature ?? '',
-                part: part ?? '',
-                task: task ?? '',
+                epic: epic ?? '-',
+                feature: feature ?? '-',
+                part: part ?? '-',
+                task: task ?? '-',
                 name: item.name,
-                description: '', // item.card?.desc || item.task?.description || '',
-                type: this.typesMap.get(item.card?.shared?.cardType) ?? this.typesArray[item.path.length]?.[1] ?? '',
-                priority: this.priorityNames[item.priority ?? 2] ?? '',
-                size: item.sizeName ?? '',
-                area: this.areas.find(area => item.labels?.includes(area)) ?? '',
+                description: '-', // item.card?.desc || item.task?.description || '',
+                type: this.typesMap.get(item.card?.shared?.cardType) ?? this.typesArray[item.path.length]?.[1] ?? '-',
+                priority: this.priorityNames[item.priority ?? 2] ?? '-',
+                size: item.sizeName ?? '-',
+                area: this.areas.find(area => item.labels?.includes(area)) ?? '-',
                 status: item.status?.toUpperCase() ?? 'TODO',
-                labels: item.labels?.filter(label => !this.areas.includes(label)).join(', ') ?? '',
+                labels: item.labels?.filter(label => !this.areas.includes(label)).join(', ') ?? '-',
             };
         });
     }
